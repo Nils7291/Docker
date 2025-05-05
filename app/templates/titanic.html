@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="utf-8">
     <title>Titanic Page</title>
@@ -7,32 +7,56 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Navigation -->
     <nav>
         <a href="/">Home</a>
         <a href="/titanic">Titanic</a>
-        <a href="https://github.com/deinGithubUsername">About</a>
+        <a href="https://github.com/Nils7291" target="_blank">About</a>
     </nav>
 
     <main>
-        <h1>Titanic Dataset (First 5 Rows)</h1>
+        <h1>Titanic Dataset (erste 5 Zeilen)</h1>
+
+        <!-- Tabelle mit den ersten 5 Zeilen -->
         {{ table|safe }}
 
-        <h2>Survivors by Gender</h2>
+        <!-- Balkendiagramm: Überlebende nach Geschlecht -->
+        <h2>Überlebende nach Geschlecht</h2>
         <canvas id="chart" width="400" height="200"></canvas>
         <script>
+            // Daten aus Flask übernehmen
+            const data = {{ survived|tojson }};
             const ctx = document.getElementById('chart').getContext('2d');
+
             const chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: {{ survived.keys()|list }},
+                    labels: Object.keys(data),
                     datasets: [{
-                        label: 'Survivors',
-                        data: {{ survived.values()|list }},
+                        label: 'Überlebende',
+                        data: Object.values(data),
                         backgroundColor: ['#36a2eb', '#ff6384']
                     }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
         </script>
     </main>
+
+    <footer>
+        <p>© 2025 Nils Taglieber</p>
+    </footer>
 </body>
 </html>
